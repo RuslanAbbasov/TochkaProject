@@ -18,10 +18,64 @@
 
 	<!-- Стили сайта -->
 	<link rel="stylesheet" href="{% static "homePage.css" %}">
+    <script src="https://vjs.zencdn.net/7.10.2/video-js.css"></script>
 </head>
 <body>
+	<nav class="navbar">
+        <div class="container">
+            <a href="/" class="navbar-brand">TochkaTube</a>
+            <div class="navbar-wrap">
+                <ul class="navbar-menu">
+                    <li><a href="#">Мои видео</a></li>
+                    <li><a href="#">Помощь проекту</a></li>
+                    <li><a href="#">Контакты</a></li>
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'profile' %}">Профиль</a>|<a href="{% url 'logout' %}">Выход</a></li>
+                    {% else %}
+                        <li><a href="{% url 'register' %}">Регистрация</a>|<a href="{% url 'login' %}">Вход</a></li>
+                    {% endif %}
+                </ul>
 
-	<!-- СОДЕРЖИМОЕ САЙТА -->
-
+                <a class="download" href="{% url 'download' %}">загрузить видео</a>
+            </div>
+        </div>
+    </nav>
+    {% if messages %}
+        	{% for message in messages %}
+          	<div class="alert alert-{{ message.tags }}">
+            	{{ message }}
+          	</div>
+        	{% endfor %}
+    {% endif %}
+    <div class="content">
+        {% block content %}
+            <div class="main-posts">
+              <div class="container">
+                <div class="row">
+                  <div class="blog-masonry masonry-true">
+                    {% for video in video_list %}
+                      <div class="post-masonry col-md-4 col-sm-6">
+                        <div class="post-thumb">
+                          <img src="{{ video.preview.url }}" alt="">
+                          <div class="title-over">
+                            <h4>{{ video.title }}</h4>
+                          </div>
+                          <div class="post-hover text-center">
+                            <div class="inside">
+                              <i class="fa fa-plus"></i>
+                              <span class="date">{{ video.create_at }}</span>
+                              <h4><a href="{% url 'video' video.id %}">{{ video.title }}</a></h4>
+                              <p>{{ video.description|slice:":100" }}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div> <!-- /.post-masonry -->
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+            </div>
+        {% endblock content %}
+    </div>
 </body>
 </html>
