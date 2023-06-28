@@ -16,14 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from django.urls import path, include
+from django.urls import path
 
 from TochkaProject import settings
 from app1 import views
 from django.contrib.auth import views as auth_views
 from django.contrib.staticfiles.urls import static
-
-
+from app1 import services
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -34,7 +33,8 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(template_name='logout.html'), name='logout'),
     path('stream/<int:pk>/', views.get_streaming_video, name='stream'),
     path('<int:pk>/', views.get_video, name='video'),
-    path('download/', views.download, name='download')
+    path('upload/', views.upload, name='upload'),
+    path('myVideo/', views.myVideo, name='myVideo')
 ]
 urlpatterns += staticfiles_urlpatterns()
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -140,5 +140,32 @@ body {
 .main-posts {
     position: relative;
     z-index: 6;
-    background-color: #f1f1f1;
+    /*background-color: #f1f1f1;*/
+}
+
+.preview{
+	width: 100px;
+	height: 100px;
+}
+
+.video {
+	background-color: #f1f1f1
+}
+
+.username {
+	display: inline-block;
+}
+
+.userImg {
+	display: inline-block;
+	width: 30px;
+	height: 30px;
+}
+
+.btn-liked {
+	background-color: #0a58ca;
+}
+
+.btn_unliked {
+	background-color: #6c757d;
 }

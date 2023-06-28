@@ -1,7 +1,9 @@
 from pathlib import Path
 from typing import IO, Generator
 from django.shortcuts import get_object_or_404
-from app1.models import Video
+from app1.models import Video, Likes
+from django.contrib.auth import get_user_model
+from django.contrib.contenttypes.models import ContentType
 
 
 def ranged(
@@ -50,3 +52,43 @@ def open_file(request, video_pk: int) -> tuple:
         content_range = f'bytes {range_start}-{range_end}/{file_size}'
 
     return file, status_code, content_length, content_range
+
+
+User = get_user_model()
+
+
+def add_like(obj, user):
+    """Лайкает `obj`.
+    """
+    obj_type = ContentType.objects.get_for_model(obj)
+    like, is_created = Likes.objects.get_or_create(
+        content_type=obj_type, object_id=obj.id, user=user)
+    return like
+
+
+def remove_like(obj, user):
+    """Удаляет лайк с `obj`.
+    """
+    obj_type = ContentType.objects.get_for_model(obj)
+    Likes.objects.filter(
+        content_type=obj_type, object_id=obj.id, user=user
+    ).delete()
+
+
+def is_fan(obj, user) -> bool:
+    """Проверяет, лайкнул ли `user` `obj`.
+    """
+    if not user.is_authenticated:
+        return False
+    obj_type = ContentType.objects.get_for_model(obj)
+    likes = Likes.objects.filter(
+        content_type=obj_type, object_id=obj.id, user=user)
+    return likes.exists()
+
+
+def get_fans(obj):
+    """Получает всех пользователей, которые лайкнули `obj`.
+    """
+    obj_type = ContentType.objects.get_for_model(obj)
+    return User.objects.filter(
+        likes__content_type=obj_type, likes__object_id=obj.id)

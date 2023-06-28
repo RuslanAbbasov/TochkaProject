@@ -27,8 +27,8 @@ SECRET_KEY = 'django-insecure-p^(7yyzeo+b$ig6wbm-pso0#8^$j24&#&&64=cc-1(k4eza)%n
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# ALLOWED_HOSTS = ['tochkaproject-production-584d.up.railway.app']
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['tochkaproject-production-584d.up.railway.app']
+# ALLOWED_HOSTS = []
 
 # Application definition
 
@@ -108,7 +108,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru-RU'
 
 TIME_ZONE = 'UTC'
 
@@ -137,3 +137,11 @@ LOGIN_URL = 'login'
 
 MEDIA_ROOT = 'C:/Users/User/TochkaProject/media/'
 MEDIA_URL = '/media/'
+
+# ----Yandex s3----
+DEFAULT_FILE_STORAGE = 'TochkaProject.storageBackends.ClientDocsStorage'  # path to file we created before
+YANDEX_CLIENT_DOCS_BUCKET_NAME = 'tochkabucket'
+AWS_ACCESS_KEY_ID = 'YCAJEg2ih30SX5d60iD96HMTX'
+AWS_SECRET_ACCESS_KEY = 'YCPh690Z2sC7VLhVOxfUQxs6_0S_WefcEHE5Wrr1'
+AWS_S3_ENDPOINT_URL = 'https://storage.yandexcloud.net'
+AWS_S3_REGION_NAME = 'ru-central1'

@@ -26,7 +26,11 @@
             <a href="/" class="navbar-brand">TochkaTube</a>
             <div class="navbar-wrap">
                 <ul class="navbar-menu">
-                    <li><a href="#">Мои видео</a></li>
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'myVideo' %}">Мои видео</a></li>
+                    {% else %}
+                        <li><a href="{% url 'register' %}">Мои видео</a></li>
+                    {% endif %}
                     <li><a href="#">Помощь проекту</a></li>
                     <li><a href="#">Контакты</a></li>
                     {% if user.is_authenticated %}
@@ -35,8 +39,11 @@
                         <li><a href="{% url 'register' %}">Регистрация</a>|<a href="{% url 'login' %}">Вход</a></li>
                     {% endif %}
                 </ul>
-
-                <a class="download" href="{% url 'download' %}">загрузить видео</a>
+                {% if user.is_authenticated %}
+                    <a class="download" href="{% url 'upload' %}">загрузить видео</a>
+                {% else %}
+                    <a class="download" href="{% url 'register' %}">загрузить видео</a>
+                {% endif %}
             </div>
         </div>
     </nav>
@@ -54,22 +61,34 @@
                 <div class="row">
                   <div class="blog-masonry masonry-true">
                     {% for video in video_list %}
-                      <div class="post-masonry col-md-4 col-sm-6">
-                        <div class="post-thumb">
-                          <img src="{{ video.preview.url }}" alt="">
-                          <div class="title-over">
-                            <h4>{{ video.title }}</h4>
-                          </div>
-                          <div class="post-hover text-center">
-                            <div class="inside">
-                              <i class="fa fa-plus"></i>
-                              <span class="date">{{ video.create_at }}</span>
-                              <h4><a href="{% url 'video' video.id %}">{{ video.title }}</a></h4>
-                              <p>{{ video.description|slice:":100" }}</p>
+                        <div class="video" style="max-width: 540px; cursor: pointer" onclick="location.href='{% url 'video' video.id %}'">
+                            <div>
+                                <img class="preview" src="{{video.preview.url}}" alt="image">
+                                <div class="col-md-8m mx-4 w-50">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{video.title}}</h5>
+                                        <p class="card-text">{{video.description|slice:":20"}}</p>
+                                        <p class="card-text"><small class="text-muted">{{video.create_at|date:"d F Y"}}</small></p>
+                                    </div>
+                                </div>
                             </div>
-                          </div>
                         </div>
-                      </div> <!-- /.post-masonry -->
+{#                      <div class="post-masonry col-md-4 col-sm-6">#}
+{#                        <div class="post-thumb">#}
+{#                          <img src="{{ video.preview.url }}" alt="">#}
+{#                          <div class="title-over">#}
+{#                            <h4>{{ video.title }}</h4>#}
+{#                          </div>#}
+{#                          <div class="post-hover text-center">#}
+{#                            <div class="inside">#}
+{#                              <i class="fa fa-plus"></i>#}
+{#                              <span class="date">{{ video.create_at }}</span>#}
+{#                              <h4><a href="{% url 'video' video.id %}">{{ video.title }}</a></h4>#}
+{#                              <p>{{ video.description|slice:":100" }}</p>#}
+{#                            </div>#}
+{#                          </div>#}
+{#                        </div>#}
+{#                      </div> <!-- /.post-masonry -->#}
                     {% endfor %}
                   </div>
                 </div>

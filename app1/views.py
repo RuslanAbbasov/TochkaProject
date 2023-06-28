@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, get_object_or_404
@@ -8,7 +10,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, VideoUploadForm
 from .models import Video, Profile
-from .services import open_file
+from .services import open_file, add_like, remove_like, is_fan, get_fans
 
 
 # Create your views here.
@@ -20,7 +22,10 @@ def homePage(request):
 
 def get_video(request, pk: int):
     _video = get_object_or_404(Video, id=pk)
-    return render(request, "video.html", {"video": _video})
+    _profile = get_object_or_404(Profile, id=pk)
+    _user = get_object_or_404(User, id=pk)
+    url = _video.generate_download_url()
+    return render(request, "video.html", {"video": url, "profile": _profile})
 
 
 def get_streaming_video(request, pk: int):
@@ -83,14 +88,20 @@ def profile(request):
 #         upload_video.save()
 #         messages.success(request, 'Video has been uploaded.')
 #
-#     return render(request, 'download.html')
+#     return render(request, 'upload.html')
 
 
-def download(request):
+def upload(request):
     if request.method == 'POST':
         form = VideoUploadForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
-            form.save()
+            # form = form.save(commit=False)
+            newVideo = Video(user=request.user,
+                             title=form.cleaned_data['title'],
+                             description=form.cleaned_data['description'],
+                             preview=form.cleaned_data['preview'],
+                             file=form.cleaned_data['file'])
+            newVideo.save()
             messages.success(request, f'Ваше видео успешно загружено.')
             return redirect('homePage')
         else:
@@ -98,5 +109,8 @@ def download(request):
             messages.success(request, form.non_field_errors)
     else:
         form = VideoUploadForm()
-    return render(request, 'download.html', {'form': form})
+    return render(request, 'upload.html', {'form': form})
 
+
+def myVideo(request):
+    return render(request, 'myVideo.html', {'video_list': Video.objects.filter(user=request.user.id)})

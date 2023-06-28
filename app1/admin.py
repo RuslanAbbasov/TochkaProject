@@ -1,7 +1,11 @@
 from django.contrib import admin
-from .models import Profile, Video
+from .models import Profile, Video, Likes
 from .forms import VideoUploadForm
+
 admin.site.register(Profile)
+admin.site.register(Likes)
+
+
 # admin.site.register(Video)
 # Register your models here.
 

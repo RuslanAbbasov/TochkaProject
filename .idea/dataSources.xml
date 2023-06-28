@@ -10,7 +10,7 @@
       <jdbc-url>jdbc:sqlite:C:\Users\User\TochkaProject\db.sqlite3</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="db.sqlite3" uuid="ad1bff2d-9f52-43e3-acc3-a95ddcf9ff22">
+    <data-source source="LOCAL" name="db.sqlite3" uuid="4e5e4c3d-b0ca-49a7-b6ae-d8d8191ecf85">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>

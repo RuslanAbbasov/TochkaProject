@@ -1,6 +1,8 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+from django.core.validators import FileExtensionValidator
+
 from .models import Profile, Video
 
 
@@ -34,9 +36,3 @@ class VideoUploadForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
         super(VideoUploadForm, self).__init__(*args, **kwargs)
-
-    def save(self, commit=True):
-        instance = super(VideoUploadForm, self).save(commit=False)
-        if self.user:
-            instance.user = self.user
-        return instance.save()
