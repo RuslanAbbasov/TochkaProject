@@ -73,23 +73,17 @@ class Video(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     title = models.CharField(max_length=100)
     description = models.TextField()
-    preview = models.ImageField()
+    preview = models.ImageField(upload_to='preview')
     likes = GenericRelation(Likes)
     file = models.FileField(
-        validators=[FileExtensionValidator(allowed_extensions=['mp4', 'mov'])]
+        validators=[FileExtensionValidator(allowed_extensions=['mp4', 'mov'])],
+        upload_to='video'
     )
     create_at = models.DateTimeField(auto_now_add=True)
-    content_key = models.CharField(max_length=200, unique=True)
+    content_key = models.CharField(max_length=200)
 
     def generate_download_url(self, ):
-        s3 = boto3.client('s3')
-        url = s3.generate_presigned_url(
-            ClientMethod='get_object',
-            Params={
-                'Bucket': settings.YANDEX_CLIENT_DOCS_BUCKET_NAME,
-                'Key': self.content_key
-            }
-        )
+        url = self.file.url
         return url
 
     def __str__(self):

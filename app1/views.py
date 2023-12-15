@@ -22,10 +22,10 @@ def homePage(request):
 
 def get_video(request, pk: int):
     _video = get_object_or_404(Video, id=pk)
-    _profile = get_object_or_404(Profile, id=pk)
-    _user = get_object_or_404(User, id=pk)
+    # _profile = get_object_or_404(Profile, id=pk)
+    # _user = get_object_or_404(User, id=pk)
     url = _video.generate_download_url()
-    return render(request, "video.html", {"video": url, "profile": _profile})
+    return render(request, "video.html", {"video": _video})
 
 
 def get_streaming_video(request, pk: int):
